@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>rain</title>
+    </head>
+
+    <body bgcolor="black" onload="setup();">
+        <center>
+            <canvas id="canvas"></canvas>
+            <script src="main.js"></script>
+            <script>
+                var canvas = document.getElementById('canvas');
+                canvas.width = window.innerWidth - 50;
+                canvas.height = window.innerHeight - 50;
+                window.onresize = function () {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                }
+            </script>
+        </center>
+
+    </body>
+
+</html>
