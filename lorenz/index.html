@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Lorenz Attractor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+</head>
+
+<body style="margin: 0; overflow: hidden;">
+    <input type="range" min="0.1" max="5" step="0.1" value="2" id="scaleRange">
+    <div id="scaleValue">Escala: 2</div>
+    <script>
+        let x = 0.01;
+        let y = 0;
+        let z = 0;
+
+        const a = 10;
+        const b = 28;
+        const c = 8.0 / 3.0;
+
+        let points = [];
+        let scaleValue = 2; // Valor inicial da escala
+
+        function setup() {
+            createCanvas(windowWidth, windowHeight, WEBGL);
+            colorMode(HSB, 255);
+
+            // Adicione um ouvinte de evento para atualizar a escala quando o controle deslizante muda
+            const scaleRange = document.getElementById("scaleRange");
+            scaleRange.addEventListener("input", function() {
+                scaleValue = parseFloat(scaleRange.value);
+                document.getElementById("scaleValue").innerText = `Escala: ${scaleValue}`;
+            });
+        }
+
+        function draw() {
+            background(0);
+
+            let dt = 0.01;
+            let dx = a * (y - x) * dt;
+            let dy = (x * (b - z) - y) * dt;
+            let dz = (x * y - c * z) * dt;
+            x = x + dx;
+            y = y + dy;
+            z = z + dz;
+
+            let hu = 0;
+
+            for (let i = 0; i < points.length - 1; i++) {
+                const p1 = points[i];
+                const p2 = points[i + 1];
+                stroke(hu, 255, 255);
+                line(p1.x * scaleValue, p1.y * scaleValue, p1.z * scaleValue, p2.x * scaleValue, p2.y * scaleValue, p2.z * scaleValue);
+                hu = (hu + 0.1) % 255;
+            }
+
+            points.push(createVector(x, y, z));
+
+            if (points.length > 2000) {
+                points.splice(0, 1);
+            }
+
+            translate(0, 0, -80);
+            let camX = map(mouseX, 0, width, -200, 200);
+            let camY = map(mouseY, 0, height, -200, 200);
+            camera(camX, camY, height / 2.0 / tan((PI * 30.0) / 180.0), 0, 0, 0, 0, 1, 0);
+            stroke(255);
+            noFill();
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+        }
+    </script>
+</body>
+
+</html>
